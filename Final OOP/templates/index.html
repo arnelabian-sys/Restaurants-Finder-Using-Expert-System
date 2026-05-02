@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Finder Using Expert System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div id="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <!-- Header -->
+        <div class="header">
+            <h2>Restaurant Finder</h2>
+            <small>CABADBARAN CITY · EXPERT SYSTEM</small>
+            <a href="#" onclick="goAdmin()" class="admin-btn">ADMIN</a>
+        </div>
+
+        <!-- Search -->
+        <div class="search-area">
+            <div class="search-row">
+                <input
+                    class="search-input"
+                    id="searchInput"
+                    type="text"
+                    placeholder="chicken, seafood, bbq..."
+                    autocomplete="off"
+                    oninput="showSuggestions(this.value)"
+                    onkeydown="handleKey(event)"
+                />
+                <button class="search-btn" onclick="doSearch()">Search</button>
+            </div>
+            <div class="suggestions-box" id="suggestionsBox"></div>
+        </div>
+
+        <!-- Results -->
+        <div class="results-area" id="resultsArea">
+            <div class="empty-state">
+                <div class="empty-icon">🍽️</div>
+                <div class="empty-text">Type any food or drink<br>then hit Search</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MAP -->
+    <div class="map-wrap">
+        <div id="map"></div>
+    </div>
+
+</div>
+
+<!-- RESTAURANT DETAIL PANEL -->
+<div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+        <div class="detail-title" id="detailTitle"></div>
+        <div class="detail-sub" id="detailSub"></div>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+async function goAdmin() {
+    try {
+        const res = await fetch("/api/check-auth", { credentials: "include" });
+        if (res.ok) {
+            window.location.href = "/admin";
+        } else {
+            window.location.href = "/login";
+        }
+    } catch {
+        window.location.href = "/login";
+    }
+}
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

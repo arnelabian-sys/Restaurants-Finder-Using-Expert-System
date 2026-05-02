@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-image: url("{{ url_for('static', filename='loveCbr.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .container {
+        text-align: center;
+        padding: 60px 40px;
+        max-width: 550px;
+        width: 90%;
+        color: white;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2); 
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); 
+        /* transition added here for smoother JS animation */
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    h1 {
+        font-size: 4.5rem;
+        font-weight: 800;
+        letter-spacing: 5px;
+        margin-bottom: 10px;
+        color: #FF4500; 
+        text-shadow: 2px 2px 15px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+        color: #FFD700; 
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 3px; 
+        text-transform: uppercase;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    p {
+        font-size: 1.3rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        margin-bottom: 45px;
+        color: #ffffff;
+        text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    }
+
+    .start-btn {
+        display: inline-block;
+        padding: 15px 60px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .start-btn:hover {
+        background-color: white;
+        color: #000;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .start-btn:active {
+        transform: scale(0.95);
+    }
+</style>
+
+</head>
+<body>
+
+    <div class="container" id="welcome-box">
+        <h2>RESTAURANT FINDER</h2>
+        <h1>WELCOME!</h1>
+        <p>Your Gateway to Local Delicacies.</p>
+        <a href="/explore" class="start-btn">Start</a>
+    </div>
+
+    <script>
+        document.querySelector('.start-btn').addEventListener('click', function(e) {
+            e.preventDefault(); // Pugngan ang dinalian nga pagbalhin
+            const targetUrl = this.getAttribute('href');
+            
+            const box = document.getElementById('welcome-box');
+            
+            // Sugdan ang fade out animation
+            box.style.opacity = "0";
+            box.style.transform = "scale(0.9)";
+
+            // Human sa 500ms, ayha pa mobalhin sa link
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 500);
+        });
+    </script>
+</body>
+</html>

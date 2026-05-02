@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: Arial;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #FF3800;
+        }
+        .box {
+            background: rgba(255, 255, 255, 0.1); /* White nga naay transparency */
+            backdrop-filter: blur(10px);        /* Kini ang mupatunaw sa background */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Nipis nga border para klaro ang edge */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            
+            background: linear-gradient(90deg, #F64C18, #EE9539);
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        input, button {
+            box-sizing: border-box;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: orange;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .link {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .link a {
+            color: greenyellow;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Sign Up</h2>
+
+    <input type="text" id="user" onkeydown="if(event.key==='Enter') signup()">
+    <input type="password" id="pass" onkeydown="if(event.key==='Enter') signup()">
+    <input type="password" id="confirm" onkeydown="if(event.key==='Enter') signup()">
+
+    <button onclick="signup()">Create Account</button>
+
+    <p id="msg" style="color:red;"></p>
+
+    <div class="link">
+        <p>Already have an account? <a href="/login">Login here</a></p>
+    </div>
+</div>
+
+<script>
+async function signup() {
+    const u = document.getElementById("user").value.trim();
+    const p = document.getElementById("pass").value;
+    const c = document.getElementById("confirm").value;
+
+    if (!u || !p) {
+        document.getElementById("msg").innerText = "Username and password are required.";
+        return;
+    }
+
+    if (p !== c) {
+        document.getElementById("msg").innerText = "Passwords do not match.";
+        return;
+    }
+
+    if (p.length < 4) {
+        document.getElementById("msg").innerText = "Password must be at least 4 characters.";
+        return;
+    }
+
+    const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            username: u,
+            password: p
+        })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        alert("Signup successful!");
+        window.location.href = "/login";
+    } else {
+        document.getElementById("msg").innerText = data.error;
+    }
+}
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

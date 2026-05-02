@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Admin Login</title>
+    <style>
+        body {
+            font-family: Arial;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(90deg, #E62314, #F19E18);
+        }
+        input, button {
+            box-sizing: border-box;
+        }
+        .box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #F64C18, #EE9539);
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+        input.error {
+            border-color: #ff1a1a;
+            background: #fff0f0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: orange;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e69500;
+        }
+        .link {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .link a {
+            color: greenyellow;
+            text-decoration: none;
+        }
+
+        /* Shake animation */
+        @keyframes shake {
+            0%   { transform: translateX(0); }
+            15%  { transform: translateX(-8px); }
+            30%  { transform: translateX(8px); }
+            45%  { transform: translateX(-6px); }
+            60%  { transform: translateX(6px); }
+            75%  { transform: translateX(-4px); }
+            90%  { transform: translateX(4px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.10s ease;
+        }
+
+        /* Flash red overlay */
+        @keyframes flashRed {
+            0%   { background: linear-gradient(90deg, #F64C18, #EE9539); }
+            30%  { background: linear-gradient(90deg, #cc0000, #ff4444); }
+            100% { background: linear-gradient(90deg, #F64C18, #EE9539); }
+        }
+        .flash-error {
+            animation: flashRed 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Admin Login</h2>
+
+    <input type="text" id="user" placeholder="Username" onkeydown="if(event.key==='Enter') login()">
+    <input type="password" id="pass" placeholder="Password" onkeydown="if(event.key==='Enter') login()">
+
+    <button onclick="login()">Login</button>
+
+    <p id="msg" style="color:red;"></p>
+
+    <!-- SIGNUP LINK -->
+    <div class="link">
+        <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+    </div>
+</div>
+
+<script>
+async function login() {
+    const uEl = document.getElementById("user");
+    const pEl = document.getElementById("pass");
+    const box = document.querySelector(".box");
+    const msg = document.getElementById("msg");
+
+    const u = uEl.value;
+    const p = pEl.value;
+
+    // Clear previous errors
+    uEl.classList.remove("error");
+    pEl.classList.remove("error");
+    msg.innerText = "";
+
+    const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username: u, password: p })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        window.location.href = "/admin";
+    } else {
+        // 1. Show error message
+        msg.innerText = data.error || "Invalid username or password.";
+
+        // 2. Red border on both inputs
+        uEl.classList.add("error");
+        pEl.classList.add("error");
+
+        // 3. Shake the box
+        box.classList.remove("shake");
+        void box.offsetWidth; // force reflow para ma-restart ang animation
+        box.classList.add("shake");
+
+        // 4. Flash red
+        box.classList.add("flash-error");
+
+        // 5. Clear password, focus back
+        pEl.value = "";
+        pEl.focus();
+
+        // Remove classes after animation
+        setTimeout(() => {
+            box.classList.remove("shake", "flash-error");
+            uEl.classList.remove("error");
+            pEl.classList.remove("error");
+        }, 2500);
+    }
+}
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
