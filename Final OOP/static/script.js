@@ -338,6 +338,14 @@ function pinRestaurant(id) {
 
     map.flyTo([r.lat, r.lng], 17, { animate: true, duration: 1 });
     setTimeout(() => mapMarkers[id] && mapMarkers[id].openPopup(), 1000);
+
+    // Mobile: scroll down to map
+    if (window.innerWidth <= 768) {
+        const mapEl = document.getElementById('map');
+        if (mapEl) {
+            mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
 }
 
 // =============================================
