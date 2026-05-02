@@ -9,19 +9,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            height: auto;
             background: #FF3800;
+            padding: 20px;
         }
         .box {
-            background: rgba(255, 255, 255, 0.1); /* White nga naay transparency */
-            backdrop-filter: blur(10px);        /* Kini ang mupatunaw sa background */
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Nipis nga border para klaro ang edge */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            
             background: linear-gradient(90deg, #F64C18, #EE9539);
             padding: 30px;
             border-radius: 10px;
-            width: 300px;
+            width: 100%;
+            max-width: 350px;
             text-align: center;
         }
         input, button {
@@ -55,9 +57,9 @@
 <div class="box">
     <h2>Sign Up</h2>
 
-    <input type="text" id="user" onkeydown="if(event.key==='Enter') signup()">
-    <input type="password" id="pass" onkeydown="if(event.key==='Enter') signup()">
-    <input type="password" id="confirm" onkeydown="if(event.key==='Enter') signup()">
+    <input type="text" id="user" placeholder="Username" onkeydown="if(event.key==='Enter') signup()">
+    <input type="password" id="pass" placeholder="Password" onkeydown="if(event.key==='Enter') signup()">
+    <input type="password" id="confirm" placeholder="Confirm Password" onkeydown="if(event.key==='Enter') signup()">
 
     <button onclick="signup()">Create Account</button>
 
